@@ -38,6 +38,8 @@
           </li>
         </ul>
         @endif
+      @elseif($booking->booking_status_id == App\Models\BookingStatus::PAYMENT)
+        <p>Service is complete</p>
       @endif
     </div>
     <div>
@@ -49,7 +51,7 @@
           onclick="showAcceptBooking({{$booking->assistance_id}},{{$booking->booking_id}})">Accept Request</button>
       @elseif($booking->booking_status_id == App\Models\BookingStatus::ACTIVE)
         <button type="button" class="btn btn-primary" 
-          onclick="">Generate Invoice</button>
+          onclick="generateInvoice({{$booking->assistance_id}},{{$booking->booking_id}})">Generate Invoice</button>
       @elseif($booking->booking_status_id == App\Models\BookingStatus::PAYMENT)
 
       @endif

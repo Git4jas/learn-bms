@@ -98,7 +98,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Confirm Booking?</h4>
+        <h4 class="modal-title">Confirm Action?</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -211,6 +211,41 @@ function showAcceptBooking(service_id, booking_id){
         $('#acpt_bk_booking_id').val(booking_id);
         $('#acpt_bk_slot_container').html(data.slots_dd_snippet);
         $('#accept_booking_modal').modal('show');
+      }
+      else{
+        errorMessageToastr(data.error);
+      }
+    }
+    else{
+      errorMessageToastr('Error loading booking details. Please try again later.');
+    }
+  })
+  .fail(function(jqXHR, textStatus, errorThrown){
+    $('#booking_tab_loading').hide();
+    errorMessageToastr('Request failed. Unexpected error!!!');
+  });
+}
+
+function generateInvoice(service_id, booking_id){
+  var form_data = {
+    'status': 'payment',
+    'slot_id': $('#booking_selected_slot').val(),
+    '_method': 'PUT',
+    '_token': XCSRF_TOKEN
+  };
+
+  $('#booking_tab_loading').show();
+  $.ajax({
+    url: BMS_CNS_BASE + 'assistances/' + service_id + '/bookings/' + booking_id,
+    type: 'POST',
+    data: form_data
+  }).done(function(data, textStatus, jqXHR){
+    $('#booking_tab_loading').hide();
+
+    if(textStatus == 'success'){
+      if(data.status == 'success'){
+        successMessageToastr('Status updated successfully!');
+        $('#service_card_' + booking_id).remove();
       }
       else{
         errorMessageToastr(data.error);
