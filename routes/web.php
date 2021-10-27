@@ -53,7 +53,7 @@ Route::group(
                 ]);
 
                 Route::resource('assistances.bookings', 'BookingController')->only([
-                    'index', 'update'
+                    'index', 'update', 'show'
                 ]);
             }
         );

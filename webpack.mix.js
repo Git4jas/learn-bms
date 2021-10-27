@@ -29,6 +29,7 @@ mix.js('resources/js/app.js', 'public/js')
     .combine([
         'node_modules/admin-lte/plugins/fontawesome-free/css/all.min.css',
         'node_modules/admin-lte/dist/css/adminlte.min.css',
+        'node_modules/admin-lte/plugins/toastr/toastr.min.css',
     ], 'public/css/consultant.css')
     .copy('node_modules/admin-lte/plugins/fontawesome-free/webfonts', 'public/webfonts')
 
@@ -36,6 +37,7 @@ mix.js('resources/js/app.js', 'public/js')
         'node_modules/admin-lte/plugins/jquery/jquery.min.js',
         'node_modules/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js',
         'node_modules/admin-lte/dist/js/adminlte.min.js',
+        'node_modules/admin-lte/plugins/toastr/toastr.min.js'
     ], 'public/js/consultant.js')
     
     .version();

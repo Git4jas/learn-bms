@@ -75,11 +75,11 @@
                     
                   </div>
                   <div class="col-md-12" id="booking_load_more_container">
-                    <button type="button" class="load_more_btn btn btn-block btn-primary btn-sm" data-page-no="1" style="display:none;">Load More</button>
+                    <button type="button" class="load_more_btn btn btn-block btn-primary btn-sm" 
+                      data-page-no="1" data-list-type="pending" 
+                      style="display:none;">Load More</button>
                     <p class="no_record_text text-center text-default" style="display:none;">No More Records..</p>
                   </div>
-
-                    
 
                 </div>
               </div>
@@ -93,10 +93,65 @@
 
   </div>
 </div>
+
+<div class="modal fade" id="accept_booking_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Confirm Booking?</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="acpt_bk_assistance_id" value="">
+        <input type="hidden" id="acpt_bk_booking_id" value="">
+        <div id="acpt_bk_slot_container"></div>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="submit_accept_booking" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 
 @section('page_based_js')
 <script>
+
+/******** Config for Toastr **************/
+toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": true,
+    "positionClass": "toast-bottom-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "show",
+    "hideMethod": "fadeOut"
+}
+/*****************************************/
+
+/******** Toastr messages **************/
+function successMessageToastr(message){
+    var text_message = message ? message : 'Success!';
+    toastr["success"](text_message);
+}
+
+function errorMessageToastr(message){
+    var text_message = message ? message : 'An error occurred. Please try again later!';
+    toastr["error"](text_message);
+}
+/*****************************************/
 
 function getServiceBookings(service_id, type, render_mode, page_no){
   $('#booking_tab_loading').show();
@@ -109,8 +164,6 @@ function getServiceBookings(service_id, type, render_mode, page_no){
       page: page_no ? page_no : 1
     }
   }).done(function(data, textStatus, jqXHR){
-    //console.log(data);
-    //console.log(textStatus);
     $('#booking_tab_loading').hide();
 
     if(textStatus == 'success'){
@@ -123,7 +176,8 @@ function getServiceBookings(service_id, type, render_mode, page_no){
       
       if(data.has_more_pages){
         $('#booking_load_more_container').find('button')
-          .data('page-no', data.next_page_no).show();
+          .data('page-no', data.next_page_no)
+          .data('list-type', type).show();
         $('#booking_load_more_container').find('p').hide();
       }
       else{
@@ -132,13 +186,17 @@ function getServiceBookings(service_id, type, render_mode, page_no){
       }
     }
     else{
-      // to do error
+      errorMessageToastr('Error loading bookings. Please try again later.');
     }
   })
   .fail(function(jqXHR, textStatus, errorThrown){
     $('#booking_tab_loading').hide();
-    //console.log(errorThrown);  
+    errorMessageToastr('Request failed. Unexpected error!!!');
   });
+}
+
+function acceptBooking(assistance_id, booking_id){
+  
 }
 
 $(document).ready(function(){
@@ -158,6 +216,13 @@ $(document).ready(function(){
     var selected_assistance_id = $('#carouselServiceItems').find('div.carousel-item.active').data('assistance-id');
     var list_type = $(this).data('list-type');
     getServiceBookings(selected_assistance_id, list_type, 'reload', 1);
+  });
+
+  $('.load_more_btn').click(function(){
+    var page_no = $(this).data('page-no');
+    var list_type = $(this).data('list-type');
+    var selected_assistance_id = $('#carouselServiceItems').find('div.carousel-item.active').data('assistance-id');
+    getServiceBookings(selected_assistance_id, list_type, 'append', page_no);
   });
 });
 </script>

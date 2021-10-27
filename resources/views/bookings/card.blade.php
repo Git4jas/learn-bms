@@ -12,6 +12,7 @@
   </div>
   <div class="card-body">
     <div>
+      @if($booking->booking_status_id == App\Models\BookingStatus::PENDING)
       <p>The customer is available at:</p>
       <ul>
         @foreach ($booking->consultation_slots as $slot)
@@ -24,12 +25,20 @@
         </li>    
         @endforeach
       </ul>
+      @endif
     </div>
     <div>
       <p class="text-info"><i class="fas fa-map-marker-alt"></i> To Do</p>
     </div>
     <div>
-      <button type="button" class="btn btn-primary">Accept Request</button>
+      @if($booking->booking_status_id == App\Models\BookingStatus::PENDING)
+        <button type="button" class="btn btn-primary" 
+          onclick="acceptBooking({{$booking->assistance_id}},{{$booking->booking_id}})">Accept Request</button>
+      @elseif($booking->booking_status_id == App\Models\BookingStatus::ACTIVE)
+
+      @elseif($booking->booking_status_id == App\Models\BookingStatus::PAYMENT)
+
+      @endif
     </div>
   </div>
 </div>
