@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BMS | Services</title>
+  <title>BMS</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -206,6 +206,7 @@
 <!-- REQUIRED SCRIPTS -->
 <script>
   var BMS_CNS_BASE = '{{ url('/') }}/consultant/';
+  var XCSRF_TOKEN = '{{ csrf_token() }}';
 </script>
 <script src="{{ mix('js/consultant.js') }}"></script>
 @yield('page_based_js')

@@ -110,7 +110,7 @@
       </div>
       <div class="modal-footer justify-content-between">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" id="submit_accept_booking" class="btn btn-primary">Save changes</button>
+        <button type="button" id="submit_accept_booking" class="btn btn-primary">Save Changes</button>
       </div>
     </div>
   </div>
@@ -195,8 +195,35 @@ function getServiceBookings(service_id, type, render_mode, page_no){
   });
 }
 
-function acceptBooking(assistance_id, booking_id){
-  
+function showAcceptBooking(service_id, booking_id){
+  $('#booking_tab_loading').show();
+
+  $.ajax({
+    url: BMS_CNS_BASE + 'assistances/' + service_id + '/bookings/' + booking_id,
+    type: 'GET',
+    data: {}
+  }).done(function(data, textStatus, jqXHR){
+    $('#booking_tab_loading').hide();
+
+    if(textStatus == 'success'){
+      if(data.status == 'success'){
+        $('#acpt_bk_assistance_id').val(service_id);
+        $('#acpt_bk_booking_id').val(booking_id);
+        $('#acpt_bk_slot_container').html(data.slots_dd_snippet);
+        $('#accept_booking_modal').modal('show');
+      }
+      else{
+        errorMessageToastr(data.error);
+      }
+    }
+    else{
+      errorMessageToastr('Error loading booking details. Please try again later.');
+    }
+  })
+  .fail(function(jqXHR, textStatus, errorThrown){
+    $('#booking_tab_loading').hide();
+    errorMessageToastr('Request failed. Unexpected error!!!');
+  });
 }
 
 $(document).ready(function(){
@@ -223,6 +250,45 @@ $(document).ready(function(){
     var list_type = $(this).data('list-type');
     var selected_assistance_id = $('#carouselServiceItems').find('div.carousel-item.active').data('assistance-id');
     getServiceBookings(selected_assistance_id, list_type, 'append', page_no);
+  });
+
+  $('#submit_accept_booking').click(function(){
+    var service_id = $('#acpt_bk_assistance_id').val();
+    var booking_id = $('#acpt_bk_booking_id').val();
+    var form_data = {
+      'status': 'active',
+      'slot_id': $('#booking_selected_slot').val(),
+      '_method': 'PUT',
+      '_token': XCSRF_TOKEN
+    };
+    $('#accept_booking_modal').modal('hide');
+
+    $('#booking_tab_loading').show();
+    $.ajax({
+      url: BMS_CNS_BASE + 'assistances/' + service_id + '/bookings/' + booking_id,
+      type: 'POST',
+      data: form_data
+    }).done(function(data, textStatus, jqXHR){
+      $('#booking_tab_loading').hide();
+
+      if(textStatus == 'success'){
+        if(data.status == 'success'){
+          successMessageToastr('Status updated successfully!');
+          $('#service_card_' + booking_id).remove();
+        }
+        else{
+          errorMessageToastr(data.error);
+        }
+      }
+      else{
+        errorMessageToastr('Error loading booking details. Please try again later.');
+      }
+    })
+    .fail(function(jqXHR, textStatus, errorThrown){
+      $('#booking_tab_loading').hide();
+      errorMessageToastr('Request failed. Unexpected error!!!');
+    });
+
   });
 });
 </script>
