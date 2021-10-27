@@ -37,7 +37,8 @@ mix.js('resources/js/app.js', 'public/js')
         'node_modules/admin-lte/plugins/jquery/jquery.min.js',
         'node_modules/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js',
         'node_modules/admin-lte/dist/js/adminlte.min.js',
-        'node_modules/admin-lte/plugins/toastr/toastr.min.js'
+        'node_modules/admin-lte/plugins/toastr/toastr.min.js',
+        'resources/assets/global.js'
     ], 'public/js/consultant.js')
     
     .version();

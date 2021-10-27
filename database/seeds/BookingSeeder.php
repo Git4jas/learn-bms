@@ -39,11 +39,6 @@ class BookingSeeder extends Seeder
                     $booking->assistance_id = $assistance->assistance_id;
                     $booking->booking_status_id = BookingStatus::PENDING;
                     $booking->cost_per_session = $assistance->cost_per_session;
-                    $booking->address_line_1 = $faker->streetAddress;
-                    $booking->address_line_2 = NULL;
-                    $booking->city = $faker->city;
-                    $booking->state = $faker->stateAbbr;
-                    $booking->zip = $faker->postcode;
 
                     $booking->save();
 

@@ -31,7 +31,7 @@ class BookingController extends Controller
         $bookings = Booking::where('consultant_user_id', Auth::user()->user_id)
             ->where('assistance_id', $assistance_id)
             ->with([
-                'customer_user:user_id,name',
+                'customer_user',
                 'consultation_slots' => function($query){
                     $query->orderBy('consultation_slots.start_time', 'ASC');
                 },

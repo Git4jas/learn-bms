@@ -22,11 +22,6 @@ class CreateBookingsTable extends Migration
             $table->dateTime('session_start_time', 0)->nullable();
             $table->dateTime('session_end_time', 0)->nullable();
             $table->unsignedDecimal('cost_per_session', 10, 2)->nullable()->default(0);
-            $table->string('address_line_1')->nullable();
-            $table->string('address_line_2')->nullable();
-            $table->string('city')->nullable();
-            $table->string('state')->nullable();
-            $table->string('zip')->nullable();
             $table->timestamps();
             $table->softDeletes('deleted_at', 0);
         });

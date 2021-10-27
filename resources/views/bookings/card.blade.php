@@ -43,7 +43,9 @@
       @endif
     </div>
     <div>
-      <p class="text-info"><i class="fas fa-map-marker-alt"></i> To Do</p>
+      <p class="text-info"><i class="fas fa-map-marker-alt"></i>
+        {{ implode(', ', [$booking->customer_user->address_line_1, $booking->customer_user->city, $booking->customer_user->state, $booking->customer_user->zip]) }}
+      </p>
     </div>
     <div>
       @if($booking->booking_status_id == App\Models\BookingStatus::PENDING)

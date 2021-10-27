@@ -40,6 +40,12 @@ class UserSeeder extends Seeder
             $user->name = $user_info['name'];
             $user->email = $user_info['email'];
             $user->password = $user_info['password'];
+            $user->address_line_1 = $faker->streetAddress;
+            $user->address_line_2 = NULL;
+            $user->city = $faker->city;
+            $user->state = $faker->stateAbbr;
+            $user->zip = $faker->postcode;
+
             $user->save();
 
             $user->roles()->attach($user_info['role_id']);
